@@ -27,8 +27,8 @@ Swagger UI is available at `/swagger` in Development.
 
 ## API Endpoints
 
-- GET `/api/book` — list all books
-- GET `/api/book/{id}` — get a book by id
-- POST `/api/book` — create a new book
-- PUT `/api/book/{id}` — update a book
-- DELETE `/api/book/{id}` — delete a book
+- GET `/api/Book` — list all books
+- GET `/api/Book/{id}` — get a book by id
+- POST `/api/Book` — create a new book
+- PUT `/api/Book/{id}` — update a book
+- DELETE `/api/Book/{id}` — delete a book

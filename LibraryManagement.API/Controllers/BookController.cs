@@ -36,16 +36,10 @@ namespace LibraryManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> Create(Book book)
         {
-            var newBook = new Book
-            {
-                Title = book.Title,
-                Author = book.Author,
-                Description = book.Description,
-                PhotoUrl = book.PhotoUrl
-            };
-            _context.Books.Add(newBook);
+            book.Id = 0;
+            _context.Books.Add(book);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = newBook.Id }, newBook);
+            return CreatedAtAction(nameof(Get), new { id = book.Id }, book);
         }
         // PUT: api/Book/5   To update a book
         [HttpPut("{id}")]
