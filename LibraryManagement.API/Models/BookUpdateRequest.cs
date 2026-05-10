@@ -5,17 +5,17 @@ namespace LibraryManagement.API.Models
     public class BookUpdateRequest
     {
         [Required]
-        [MaxLength(200)]
+        [MaxLength(ValidationConstants.TitleMaxLength)]
         public string Title { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(ValidationConstants.AuthorMaxLength)]
         public string Author { get; set; } = string.Empty;
 
-        [MaxLength(2000)]
+        [MaxLength(ValidationConstants.DescriptionMaxLength)]
         public string Description { get; set; } = string.Empty;
 
-        [MaxLength(2048)]
+        [MaxLength(ValidationConstants.PhotoUrlMaxLength)]
         [Url]
         public string PhotoUrl { get; set; } = string.Empty;
     }

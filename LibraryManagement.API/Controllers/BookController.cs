@@ -55,7 +55,7 @@ namespace LibraryManagement.API.Controllers
         }
         // PUT: api/Book/5   To update a book
         [HttpPut("{id}")]
-        public async Task<ActionResult<Book>> Update(int id, BookUpdateRequest updatedBook)
+        public async Task<IActionResult> Update(int id, BookUpdateRequest updatedBook)
         {
             var book = await _context.Books.FindAsync(id);
             if (book is null)
@@ -69,7 +69,7 @@ namespace LibraryManagement.API.Controllers
 
 
             await _context.SaveChangesAsync();
-            return Ok(book);
+            return NoContent();
 
         }
         [HttpDelete("{id}")]
