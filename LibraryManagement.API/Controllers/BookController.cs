@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.API.Data;
 using LibraryManagement.API.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.API.Controllers
 {
@@ -16,17 +16,23 @@ namespace LibraryManagement.API.Controllers
         }
         // GET: api/Book   To get all books
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Book>>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var books = _context.Books;
+            var pageNumber = Math.Max(page, 1);
+            var size = Math.Clamp(pageSize, 1, 100);
+
+            var books = await _context.Books.AsNoTracking()
+                .Skip((pageNumber - 1) * size)
+                .Take(size)
+                .ToListAsync();
             return Ok(books);
         }
         // GET: api/Book/5   To get a book by id
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<Book>> Get(int id)
         {
-            var book = _context.Books.Find(id);
-            if (book == null)
+            var book = await _context.Books.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+            if (book is null)
             {
                 return NotFound();
             }
@@ -34,25 +40,25 @@ namespace LibraryManagement.API.Controllers
         }
         // POST: api/Book   To add a book
         [HttpPost]
-        public IActionResult Create(Book book)
+        public async Task<ActionResult<Book>> Create(BookCreateRequest book)
         {
-            book = new Book
+            var newBook = new Book
             {
                 Title = book.Title,
                 Author = book.Author,
                 Description = book.Description,
                 PhotoUrl = book.PhotoUrl
             };
-            _context.Books.Add(book);
-            _context.SaveChanges();
-            return StatusCode(StatusCodes.Status201Created);
+            _context.Books.Add(newBook);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(Get), new { id = newBook.Id }, newBook);
         }
         // PUT: api/Book/5   To update a book
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Book updatedBook)
+        public async Task<IActionResult> Update(int id, BookUpdateRequest updatedBook)
         {
-            var book = _context.Books.Find(id);
-            if (book == null)
+            var book = await _context.Books.FindAsync(id);
+            if (book is null)
             {
                 return NotFound();
             }
@@ -62,21 +68,21 @@ namespace LibraryManagement.API.Controllers
             book.PhotoUrl = updatedBook.PhotoUrl;
 
 
-            _context.SaveChanges();
-            return Ok(book);
+            await _context.SaveChangesAsync();
+            return NoContent();
 
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var book = _context.Books.Find(id);
-            if (book == null)
+            var book = await _context.Books.FindAsync(id);
+            if (book is null)
             {
                 return NotFound();
             }
             _context.Books.Remove(book);
-            _context.SaveChanges();
-            return Ok();
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

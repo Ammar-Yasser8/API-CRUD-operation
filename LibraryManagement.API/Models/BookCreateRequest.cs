@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagement.API.Models
 {
-    public class Book
+    public class BookCreateRequest
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(ValidationConstants.TitleMaxLength)]
         public string Title { get; set; } = string.Empty;
@@ -20,6 +18,5 @@ namespace LibraryManagement.API.Models
         [MaxLength(ValidationConstants.PhotoUrlMaxLength)]
         [Url]
         public string PhotoUrl { get; set; } = string.Empty;
-
     }
 }

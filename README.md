@@ -1,28 +1,50 @@
 # Library Management API
-# Explanation of Each CRUD Operation
-1️⃣ Get All Books (GET /api/books)
 
-    Retrieves a list of all books stored in the database.
-    Uses async-await to perform asynchronous database queries.
+Simple CRUD API for managing books using ASP.NET Core, Entity Framework Core, and SQL Server.
 
-2️⃣ Get a Specific Book by ID (GET /api/books/{id})
+## Prerequisites
 
-    Finds a book using the given id and returns it.
-    If the book does not exist, returns a 404 Not Found response.
+- .NET 8 SDK
+- SQL Server (LocalDB works for local development)
 
-3️⃣ Create a New Book (POST /api/books)
+## Configuration
 
-    Accepts a Book object in the request body.
-    Saves the new book to the database.
-    Returns 201 Created with the newly created book details.
+Update the connection string in `LibraryManagement.API/appsettings.json` or
+`LibraryManagement.API/appsettings.Development.json`:
 
-4️⃣ Update an Existing Book (PUT /api/books/{id})
+- `ConnectionStrings:DefaultConnection`
 
-    Finds the book by id and updates its properties.
-    Saves changes in the database.
-    Returns 204 No Content if the update is successful.
+## Run locally
 
-5️⃣ Delete a Book (DELETE /api/books/{id})
+From the `LibraryManagement.API` directory:
 
-    Finds a book by id and removes it from the database.
-    Returns 204 No Content if the deletion is successful.
+- Apply migrations (optional if the database is already created):
+  - `dotnet ef database update`
+- Start the API:
+  - `dotnet run`
+
+Swagger UI is available at `/swagger` in Development.
+
+## API Endpoints
+
+- GET `/api/Book` — list all books (optional `page` and `pageSize` query params)
+- GET `/api/Book/{id}` — get a book by id
+- POST `/api/Book` — create a new book
+- PUT `/api/Book/{id}` — update a book
+- DELETE `/api/Book/{id}` — delete a book
+
+### Pagination
+
+The list endpoint supports:
+
+- `page` (default: 1)
+- `pageSize` (default: 20, max: 100)
+
+### Request Body Fields
+
+`POST` and `PUT` accept:
+
+- `title` (required)
+- `author` (required)
+- `description`
+- `photoUrl` (URL)
