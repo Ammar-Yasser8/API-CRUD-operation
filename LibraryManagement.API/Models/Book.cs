@@ -1,12 +1,25 @@
-﻿namespace LibraryManagement.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagement.API.Models
 {
     public class Book
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string Description { get; set; }
-        public string PhotoUrl { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        [MaxLength(200)]
+        public string Author { get; set; } = string.Empty;
+
+        [MaxLength(2000)]
+        public string Description { get; set; } = string.Empty;
+
+        [MaxLength(2048)]
+        [Url]
+        public string PhotoUrl { get; set; } = string.Empty;
 
     }
 }
